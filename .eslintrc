@@ -1,5 +1,5 @@
 {
-  "plugins": ["react", "import", "jsx-a11y"],
+  "plugins": ["react", "react-hooks", "import", "jsx-a11y"],
   "extends": [
     "eslint:recommended",
     "plugin:import/errors",
@@ -11,7 +11,9 @@
     "react/prop-types": "off",
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
-    "react/self-closing-comp": "warn"
+    "react/self-closing-comp": "warn",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   },
   "parserOptions": {
     "ecmaVersion": 2021,
