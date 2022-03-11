@@ -45,7 +45,7 @@ const LoginButton = styled.input`
   font-weight: bold;
   letter-spacing: 1px;
   border-radius: 15px;
-  border: 2px solid #667db690;
+  border: 2px solid #fff;
 
   &:hover {
     box-shadow: 2px 2px rgba(180, 180, 180, 0.85);
