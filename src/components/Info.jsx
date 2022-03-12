@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const InfoBody = styled.div`
   width: 320px;
-  height: 120px;
+  height: fit-content;
   position: fixed;
   bottom: 10vh;
   display: flex;
@@ -28,18 +28,22 @@ const CodeDiv = styled.div`
   padding: 10px;
   border-radius: 5px;
   background-color: #f00;
+  margin: 5px;
 `;
 
 const Code = styled.code`
   font-size: 0.95rem;
+  display: block;
 `;
 
-const Info = ({ message }) => {
+const Info = ({ header, message, data }) => {
   return (
     <InfoBody>
-      <SpanHeader>Login error!</SpanHeader>
+      {header && <SpanHeader>{header}</SpanHeader>}
       <CodeDiv>
-        <Code>{message}</Code>
+        {message && <Code>{message}</Code>}
+        {data &&
+          data.map((item, index) => <Code key={index}> - {item.msg}</Code>)}
       </CodeDiv>
     </InfoBody>
   );

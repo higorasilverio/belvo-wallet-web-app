@@ -86,7 +86,7 @@ const Authentication = () => {
 
   return (
     <Main>
-      {errorDetails && <Info message={errorDetails} />}
+      {errorDetails && <Info header={"Login error!"} message={errorDetails} />}
       <AuthWrapper>
         <InputLabelWrapper htmlFor="username">
           <InputTitle>username</InputTitle>
