@@ -5,8 +5,9 @@ import styled from "styled-components";
 
 const NavigationHeader = styled.nav`
   display: flex;
+  height: 4vh;
   justify-content: center;
-  padding: 1rem;
+  padding: 2vh 1rem;
   /* from https://uigradients.com/#Hydrogen */
   background: #667db6; /* fallback for old browsers */
   background: -webkit-linear-gradient(
@@ -28,6 +29,7 @@ const NavigationHeader = styled.nav`
 const NavLinks = styled(Link)`
   padding: 4px 8px;
   margin: 0 10px;
+  height: 22px;
   text-transform: uppercase;
   width: 100px;
   background-color: #0082c8;
@@ -49,8 +51,9 @@ const NavLinks = styled(Link)`
 
   &:last-child {
     position: fixed;
-    right: 10px;
+    right: 25px;
   }
+
   @media screen and (max-width: 1024px) {
     font-size: 0.75rem;
     padding: 2px 4px;
