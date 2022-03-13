@@ -3,109 +3,8 @@ import { isEmpty } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Select from 'react-select'
-import styled from 'styled-components'
-import { Info } from '../components'
-
-const Main = styled.main`
-  width: 100%;
-  height: 92vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  /* from https://uigradients.com/#Hydrogen */
-  background: #667db6; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #667db6,
-    #0082c8,
-    #0082c8,
-    #667db6
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #667db6,
-    #0082c8,
-    #0082c8,
-    #667db6
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-`
-
-const Container = styled.form`
-  width: 750px;
-  height: 50vh;
-  background-color: #fff;
-  border-radius: 15px;
-  display: grid;
-  grid-template-rows: 10vh 1fr 1fr 1fr 1fr 1fr;
-  text-align: center;
-  align-items: center;
-  justify-items: center;
-  position: fixed;
-  top: 15vh;
-
-  @media screen and (max-width: 1024px) {
-    width: 90vw;
-    height: 60vh;
-  }
-`
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`
-
-const SummaryText = styled.span`
-  padding-top: 1rem;
-  font-size: 3rem;
-  text-transform: uppercase;
-  color: #0082c8;
-`
-
-const InputField = styled.input`
-  padding: 4px 8px;
-  height: 20px;
-  border-radius: 5px;
-  border: 2px solid #667db690;
-`
-
-const DataText = styled.label`
-  font-size: 1rem;
-  text-transform: uppercase;
-  color: #0082c8;
-`
-
-const SendButton = styled.input`
-  padding: 4px 8px;
-  width: 100px;
-
-  padding: 4px 8px;
-  text-transform: uppercase;
-
-  height: 30px;
-  background-color: #0082c8;
-  color: #fff;
-  font-weight: bold;
-  letter-spacing: 1px;
-  border-radius: 15px;
-  border: 2px solid #fff;
-
-  &:hover {
-    box-shadow: 2px 2px rgba(180, 180, 180, 0.85);
-    background-color: #0082c8;
-  }
-
-  &:disabled {
-    background-color: #cccc;
-
-    &:hover {
-      box-shadow: none;
-      background-color: #c8c8c8cc;
-    }
-  }
-`
+import { Info } from '../../components'
+import * as S from './styles'
 
 const Transfer = () => {
   const [description, setDescription] = useState('')
@@ -213,33 +112,38 @@ const Transfer = () => {
   }, [])
 
   return (
-    <Main>
+    <S.Main>
       {!isEmpty(infoArray) && <Info data={infoArray} color={color} />}
-      <Container>
-        <SummaryText>transfer</SummaryText>
-        <Wrapper>
-          <DataText htmlFor="description">enter transaction description</DataText>
-          <InputField
+      <S.Container>
+        <S.SummaryText>transfer</S.SummaryText>
+        <S.Wrapper>
+          <S.DataText htmlFor="description">enter transaction description</S.DataText>
+          <S.InputField
             type="text"
             name="description"
             id="description"
             onChange={e => fieldUpdate(e, 'description')}
           />
-        </Wrapper>
-        <Wrapper>
-          <DataText htmlFor="value">enter transaction value</DataText>
-          <InputField type="text" name="value" id="value" onChange={e => fieldUpdate(e, 'value')} />
-        </Wrapper>
-        <Wrapper>
-          <DataText htmlFor="currency">select currency</DataText>
+        </S.Wrapper>
+        <S.Wrapper>
+          <S.DataText htmlFor="value">enter transaction value</S.DataText>
+          <S.InputField
+            type="text"
+            name="value"
+            id="value"
+            onChange={e => fieldUpdate(e, 'value')}
+          />
+        </S.Wrapper>
+        <S.Wrapper>
+          <S.DataText htmlFor="currency">select currency</S.DataText>
           <Select
             defaultValue={currency}
             onChange={e => fieldUpdate(e, 'currency')}
             options={currencyOptions}
           />
-        </Wrapper>
-        <Wrapper>
-          <DataText htmlFor="receiver">select receiver</DataText>
+        </S.Wrapper>
+        <S.Wrapper>
+          <S.DataText htmlFor="receiver">select receiver</S.DataText>
           {!isEmpty(receiversList) && (
             <Select
               defaultValue={receiver}
@@ -247,15 +151,15 @@ const Transfer = () => {
               options={receiversList}
             />
           )}
-        </Wrapper>
-        <SendButton
+        </S.Wrapper>
+        <S.SendButton
           disabled={disableButton}
           type="button"
           value="send"
           onClick={() => postTransfer()}
         />
-      </Container>
-    </Main>
+      </S.Container>
+    </S.Main>
   )
 }
 

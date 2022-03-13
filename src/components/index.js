@@ -1,5 +1,5 @@
-import Info from './Info.jsx'
-import Main from './Main.jsx'
-import Navbar from './Navbar.jsx'
+import Info from './info/Info.jsx'
+import Main from './main/Main.jsx'
+import Navbar from './navbar/Navbar.jsx'
 
 export { Navbar, Main, Info }

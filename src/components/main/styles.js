@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const Mainly = styled.main`
+export const Mainly = styled.main`
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -24,9 +24,3 @@ const Mainly = styled.main`
     #667db6
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 `
-
-const Main = ({ children }) => {
-  return <Mainly>{children}</Mainly>
-}
-
-export default Main
