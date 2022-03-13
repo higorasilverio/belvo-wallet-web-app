@@ -91,6 +91,15 @@ const SendButton = styled.input`
     box-shadow: 2px 2px rgba(180, 180, 180, 0.85);
     background-color: #0082c8;
   }
+
+  &:disabled {
+    background-color: #cccc;
+
+    &:hover {
+      box-shadow: none;
+      background-color: #c8c8c8cc;
+    }
+  }
 `;
 
 const Transfer = () => {
@@ -99,7 +108,9 @@ const Transfer = () => {
   const [currency, setCurrency] = useState("");
   const [receiver, setReceiver] = useState("");
   const [receiversList, setReceiversList] = useState([]);
-  const [errorArray, setErrorArray] = useState([]);
+  const [infoArray, setInfoArray] = useState([]);
+  const [color, setColor] = useState(null);
+  const [disableButton, setDisableButton] = useState(true);
 
   const navigate = useNavigate();
 
@@ -140,6 +151,7 @@ const Transfer = () => {
   }, [navigate]);
 
   const postTransfer = useCallback(() => {
+    setColor("#42ba96");
     const config = {
       headers: { Authorization: localStorage.getItem("token") },
     };
@@ -157,11 +169,16 @@ const Transfer = () => {
         config
       )
       .then((response) => {
-        console.log(response);
+        setInfoArray([
+          {
+            msg: `Transference ${response.data.status} to ${response.data.receiver}`,
+          },
+        ]);
       })
       .catch((error) => {
         if (error.response.status === 422) {
-          setErrorArray(error.response.data.detail);
+          setColor(null);
+          setInfoArray(error.response.data.detail);
           return;
         }
         if (error.response.status === 401) {
@@ -169,10 +186,19 @@ const Transfer = () => {
           navigate("/", { replace: true });
         }
       });
-  }, [currency, description, navigate, receiver, setErrorArray, value]);
+  }, [currency, description, navigate, receiver, setInfoArray, value]);
+
+  useEffect(() => {
+    setDisableButton(
+      isEmpty(description) ||
+        isEmpty(value) ||
+        isEmpty(currency) ||
+        isEmpty(receiver)
+    );
+  }, [description, value, currency, receiver]);
 
   const fieldUpdate = useCallback((e, type) => {
-    setErrorArray([]);
+    setInfoArray([]);
     switch (type) {
       case "description":
         setDescription(e.currentTarget.value);
@@ -193,7 +219,7 @@ const Transfer = () => {
 
   return (
     <Main>
-      {!isEmpty(errorArray) && <Info data={errorArray} />}
+      {!isEmpty(infoArray) && <Info data={infoArray} color={color} />}
       <Container>
         <SummaryText>transfer</SummaryText>
         <Wrapper>
@@ -234,7 +260,12 @@ const Transfer = () => {
             />
           )}
         </Wrapper>
-        <SendButton type="button" value="send" onClick={() => postTransfer()} />
+        <SendButton
+          disabled={disableButton}
+          type="button"
+          value="send"
+          onClick={() => postTransfer()}
+        />
       </Container>
     </Main>
   );

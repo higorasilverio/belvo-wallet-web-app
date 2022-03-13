@@ -1,3 +1,5 @@
+import { isEmpty } from "lodash";
+import { useCallback } from "react";
 import styled from "styled-components";
 
 const InfoBody = styled.div`
@@ -27,7 +29,6 @@ const CodeDiv = styled.div`
   color: #fff;
   padding: 10px;
   border-radius: 5px;
-  background-color: #f00;
   margin: 5px;
 `;
 
@@ -36,14 +37,26 @@ const Code = styled.code`
   display: block;
 `;
 
-const Info = ({ header, message, data }) => {
+const Info = ({ header, message, data, color }) => {
+  const textToShow = useCallback(() => {
+    if (!isEmpty(data)) {
+      const itemIndicator = color ? "" : "-";
+      const jsxMessage = data.map((item, index) => (
+        <Code key={index}>
+          {" "}
+          {itemIndicator} {item.msg}
+        </Code>
+      ));
+      return jsxMessage;
+    }
+  }, [color, data]);
+
   return (
     <InfoBody>
       {header && <SpanHeader>{header}</SpanHeader>}
-      <CodeDiv>
+      <CodeDiv style={{ backgroundColor: color || "#f00" }}>
         {message && <Code>{message}</Code>}
-        {data &&
-          data.map((item, index) => <Code key={index}> - {item.msg}</Code>)}
+        {textToShow()}
       </CodeDiv>
     </InfoBody>
   );
