@@ -5,6 +5,8 @@ import axios from "axios";
 import { isEmpty } from "lodash";
 import { useNavigate } from "react-router-dom";
 
+import { useWindowDimensions } from "../hooks/useWindowDimensions";
+
 const Main = styled.main`
   width: 100%;
   height: 92vh;
@@ -38,6 +40,12 @@ const Container = styled.div`
   display: grid;
   grid-template-rows: 10vh 15vh 1fr;
   text-align: center;
+
+  @media screen and (max-width: 1024px) {
+    width: 90vw;
+    height: 90vh;
+    grid-template-rows: 12vh 15vh 1fr;
+  }
 `;
 
 const SummaryText = styled.span`
@@ -45,6 +53,10 @@ const SummaryText = styled.span`
   font-size: 3rem;
   text-transform: uppercase;
   color: #0082c8;
+
+  @media screen and (max-width: 1024px) {
+    font-size: 2rem;
+  }
 `;
 
 const TransactionContainer = styled.div`
@@ -65,18 +77,31 @@ const DataText = styled.span`
   font-size: 2rem;
   text-transform: uppercase;
   color: #0082c8;
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1rem;
+  }
 `;
 
 const InfoText = styled.span`
   font-size: 2.5rem;
   text-transform: uppercase;
   color: #fff;
+
+  @media screen and (max-width: 1024px) {
+    font-size: 1rem;
+  }
 `;
 
 const CodeText = styled.code`
   font-size: 1rem;
   text-transform: uppercase;
   color: #fff;
+
+  display: block;
+  @media screen and (max-width: 1024px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const DataViewBoard = styled.div`
@@ -89,6 +114,10 @@ const DataViewBoard = styled.div`
   flex-direction: ${(props) => props.direction || "row"};
   justify-content: space-evenly;
   align-items: center;
+
+  @media screen and (max-width: 1024px) {
+    flex-direction: column;
+  }
 `;
 
 const Wallet = () => {
@@ -98,6 +127,8 @@ const Wallet = () => {
   const [transactionsJsx, setTransactionsJsx] = useState(<></>);
 
   const navigate = useNavigate();
+
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     const getWallet = () => {
@@ -123,24 +154,42 @@ const Wallet = () => {
     const formatTransactions = () => {
       if (!isEmpty(transactions)) {
         const firstFiveItems = transactions.reverse().slice(0, 5);
-        const mappedTransactions = firstFiveItems.map((transaction, index) => (
-          <div key={index}>
-            <CodeText>{`Description: ${transaction.description}, `}</CodeText>
-            <CodeText>{`Amount: ${transaction.amount}, `}</CodeText>
-            <CodeText>{`Currency: ${transaction.currency}, `}</CodeText>
-            <CodeText>{`Sender: ${transaction.sender}, `}</CodeText>
-            <CodeText>{`Receiver: ${transaction.receiver}, `}</CodeText>
-            <CodeText>{`Status: ${transaction.status};`}</CodeText>
-            {index !== 4 && <hr />}
-          </div>
-        ));
-        return mappedTransactions;
+        if (width > 1024) {
+          const mappedTransactions = firstFiveItems.map(
+            (transaction, index) => (
+              <div key={index}>
+                <CodeText>{`${transaction?.description || "no description"} - ${
+                  transaction.amount
+                } ${transaction.currency} (${transaction.status})`}</CodeText>
+                <CodeText>{`from: ${transaction.sender} - to: ${transaction.receiver},`}</CodeText>
+                {index !== 4 && <hr />}
+              </div>
+            )
+          );
+          return mappedTransactions;
+        } else {
+          const mappedTransactions = firstFiveItems.map(
+            (transaction, index) => (
+              <div key={index}>
+                <CodeText>
+                  {transaction?.description || "no description"} (
+                  {transaction.amount} {transaction.currency})
+                </CodeText>
+                <CodeText>
+                  {`from: ${transaction.sender}, to: ${transaction.receiver} `}
+                </CodeText>
+                {index !== 4 && <hr />}
+              </div>
+            )
+          );
+          return mappedTransactions;
+        }
       } else return <InfoText>No transactions record!</InfoText>;
     };
 
     const transactionsJsxFormated = formatTransactions();
     setTransactionsJsx(transactionsJsxFormated);
-  }, [transactions]);
+  }, [transactions, width]);
 
   useEffect(() => {
     const formatMoney = (value) => value.toFixed(2);
