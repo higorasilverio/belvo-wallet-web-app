@@ -1,11 +1,9 @@
-import styled from "styled-components";
-import { useState } from "react";
-import { useEffect } from "react";
-import axios from "axios";
-import { isEmpty } from "lodash";
-import { useNavigate } from "react-router-dom";
-
-import { useWindowDimensions } from "../hooks/useWindowDimensions";
+import axios from 'axios'
+import { isEmpty } from 'lodash'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import styled from 'styled-components'
+import { useWindowDimensions } from '../hooks/useWindowDimensions'
 
 const Main = styled.main`
   width: 100%;
@@ -30,7 +28,7 @@ const Main = styled.main`
     #0082c8,
     #667db6
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-`;
+`
 
 const Container = styled.div`
   width: 750px;
@@ -46,7 +44,7 @@ const Container = styled.div`
     height: 90vh;
     grid-template-rows: 12vh 15vh 1fr;
   }
-`;
+`
 
 const SummaryText = styled.span`
   padding-top: 1rem;
@@ -57,21 +55,21 @@ const SummaryText = styled.span`
   @media screen and (max-width: 1024px) {
     font-size: 2rem;
   }
-`;
+`
 
 const TransactionContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-`;
+`
 
 const BalanceContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-`;
+`
 
 const DataText = styled.span`
   font-size: 2rem;
@@ -81,7 +79,7 @@ const DataText = styled.span`
   @media screen and (max-width: 1024px) {
     font-size: 1rem;
   }
-`;
+`
 
 const InfoText = styled.span`
   font-size: 2.5rem;
@@ -91,7 +89,7 @@ const InfoText = styled.span`
   @media screen and (max-width: 1024px) {
     font-size: 1rem;
   }
-`;
+`
 
 const CodeText = styled.code`
   font-size: 1rem;
@@ -102,7 +100,7 @@ const CodeText = styled.code`
   @media screen and (max-width: 1024px) {
     font-size: 0.8rem;
   }
-`;
+`
 
 const DataViewBoard = styled.div`
   width: 90%;
@@ -111,88 +109,82 @@ const DataViewBoard = styled.div`
   border-radius: 15px;
   color: #fff;
   display: flex;
-  flex-direction: ${(props) => props.direction || "row"};
+  flex-direction: ${props => props.direction || 'row'};
   justify-content: space-evenly;
   align-items: center;
 
   @media screen and (max-width: 1024px) {
     flex-direction: column;
   }
-`;
+`
 
 const Wallet = () => {
-  const [balance, setBalance] = useState({});
-  const [transactions, setTransactions] = useState([]);
-  const [balanceJsx, setBalanceJsx] = useState(<></>);
-  const [transactionsJsx, setTransactionsJsx] = useState(<></>);
+  const [balance, setBalance] = useState({})
+  const [transactions, setTransactions] = useState([])
+  const [balanceJsx, setBalanceJsx] = useState(<></>)
+  const [transactionsJsx, setTransactionsJsx] = useState(<></>)
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const { width } = useWindowDimensions();
+  const { width } = useWindowDimensions()
 
   useEffect(() => {
     const getWallet = () => {
       const config = {
-        headers: { Authorization: localStorage.getItem("token") },
-      };
+        headers: { Authorization: localStorage.getItem('token') }
+      }
       axios
-        .get("https://belvo-wallet-challenge-api.herokuapp.com/wallet", config)
-        .then((response) => {
-          setBalance(response.data.balance);
-          setTransactions(response.data.transactions);
+        .get('https://belvo-wallet-challenge-api.herokuapp.com/wallet', config)
+        .then(response => {
+          setBalance(response.data.balance)
+          setTransactions(response.data.transactions)
         })
         .catch(() => {
-          localStorage.removeItem("token");
-          navigate("/", { replace: true });
-        });
-    };
+          localStorage.removeItem('token')
+          navigate('/', { replace: true })
+        })
+    }
 
-    getWallet();
-  }, [navigate]);
+    getWallet()
+  }, [navigate])
 
   useEffect(() => {
     const formatTransactions = () => {
       if (!isEmpty(transactions)) {
-        const firstFiveItems = transactions.reverse().slice(0, 5);
+        const firstFiveItems = transactions.reverse().slice(0, 5)
         if (width > 1024) {
-          const mappedTransactions = firstFiveItems.map(
-            (transaction, index) => (
-              <div key={index}>
-                <CodeText>{`${transaction?.description || "no description"} - ${
-                  transaction.amount
-                } ${transaction.currency} (${transaction.status})`}</CodeText>
-                <CodeText>{`from: ${transaction.sender} - to: ${transaction.receiver},`}</CodeText>
-                {index !== 4 && <hr />}
-              </div>
-            )
-          );
-          return mappedTransactions;
+          const mappedTransactions = firstFiveItems.map((transaction, index) => (
+            <div key={index}>
+              <CodeText>{`${transaction?.description || 'no description'} - ${transaction.amount} ${
+                transaction.currency
+              } (${transaction.status})`}</CodeText>
+              <CodeText>{`from: ${transaction.sender} - to: ${transaction.receiver},`}</CodeText>
+              {index !== 4 && <hr />}
+            </div>
+          ))
+          return mappedTransactions
         } else {
-          const mappedTransactions = firstFiveItems.map(
-            (transaction, index) => (
-              <div key={index}>
-                <CodeText>
-                  {transaction?.description || "no description"} (
-                  {transaction.amount} {transaction.currency})
-                </CodeText>
-                <CodeText>
-                  {`from: ${transaction.sender}, to: ${transaction.receiver} `}
-                </CodeText>
-                {index !== 4 && <hr />}
-              </div>
-            )
-          );
-          return mappedTransactions;
+          const mappedTransactions = firstFiveItems.map((transaction, index) => (
+            <div key={index}>
+              <CodeText>
+                {transaction?.description || 'no description'} ({transaction.amount}{' '}
+                {transaction.currency})
+              </CodeText>
+              <CodeText>{`from: ${transaction.sender}, to: ${transaction.receiver} `}</CodeText>
+              {index !== 4 && <hr />}
+            </div>
+          ))
+          return mappedTransactions
         }
-      } else return <InfoText>No transactions record!</InfoText>;
-    };
+      } else return <InfoText>No transactions record!</InfoText>
+    }
 
-    const transactionsJsxFormated = formatTransactions();
-    setTransactionsJsx(transactionsJsxFormated);
-  }, [transactions, width]);
+    const transactionsJsxFormated = formatTransactions()
+    setTransactionsJsx(transactionsJsxFormated)
+  }, [transactions, width])
 
   useEffect(() => {
-    const formatMoney = (value) => value.toFixed(2);
+    const formatMoney = value => value.toFixed(2)
 
     const formatBalance = () => {
       if (!isEmpty(balance)) {
@@ -202,13 +194,13 @@ const Wallet = () => {
             <InfoText>doge: {formatMoney(balance?.DOGE)}</InfoText>
             <InfoText>eth: {formatMoney(balance?.ETH)}</InfoText>
           </>
-        );
-      } else return <InfoText>Loading balance!</InfoText>;
-    };
+        )
+      } else return <InfoText>Loading balance!</InfoText>
+    }
 
-    const balanceJsxFormated = formatBalance();
-    setBalanceJsx(balanceJsxFormated);
-  }, [balance]);
+    const balanceJsxFormated = formatBalance()
+    setBalanceJsx(balanceJsxFormated)
+  }, [balance])
 
   return (
     <Main>
@@ -224,7 +216,7 @@ const Wallet = () => {
         </TransactionContainer>
       </Container>
     </Main>
-  );
-};
+  )
+}
 
-export default Wallet;
+export default Wallet

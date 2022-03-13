@@ -1,5 +1,5 @@
-import Wallet from "./Wallet.jsx";
-import Authentication from "./Authentication.jsx";
-import Transfer from "./Transfer.jsx";
+import Authentication from './Authentication.jsx'
+import Transfer from './Transfer.jsx'
+import Wallet from './Wallet.jsx'
 
-export { Wallet, Authentication, Transfer };
+export { Wallet, Authentication, Transfer }

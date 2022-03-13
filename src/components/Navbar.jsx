@@ -1,7 +1,6 @@
-import { useCallback } from "react";
-import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-import styled from "styled-components";
+import { useCallback } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import styled from 'styled-components'
 
 const NavigationHeader = styled.nav`
   display: flex;
@@ -24,7 +23,7 @@ const NavigationHeader = styled.nav`
     #0082c8,
     #667db6
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-`;
+`
 
 const NavLinks = styled(Link)`
   padding: 4px 8px;
@@ -64,18 +63,18 @@ const NavLinks = styled(Link)`
       right: 0;
     }
   }
-`;
+`
 
 const Navbar = () => {
-  const { pathname } = useLocation();
+  const { pathname } = useLocation()
 
   const logout = useCallback(() => {
-    localStorage.removeItem("token");
-  }, []);
+    localStorage.removeItem('token')
+  }, [])
 
   return (
     <>
-      {pathname !== "/" && (
+      {pathname !== '/' && (
         <NavigationHeader>
           <NavLinks to="/wallet">wallet</NavLinks>
           <NavLinks to="/transfer">transfer</NavLinks>
@@ -85,7 +84,7 @@ const Navbar = () => {
         </NavigationHeader>
       )}
     </>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

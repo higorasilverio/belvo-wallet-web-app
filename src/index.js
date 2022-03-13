@@ -1,9 +1,9 @@
-import { render } from "react-dom";
-import "./index.css";
-import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Authentication, Wallet, Transfer } from "./routes";
-import { Navbar } from "./components";
+import { render } from 'react-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Navbar } from './components'
+import './index.css'
+import reportWebVitals from './reportWebVitals'
+import { Authentication, Transfer, Wallet } from './routes'
 
 render(
   <BrowserRouter>
@@ -14,7 +14,7 @@ render(
       <Route path="transfer" element={<Transfer />} />
     </Routes>
   </BrowserRouter>,
-  document.getElementById("root")
-);
+  document.getElementById('root')
+)
 
-reportWebVitals();
+reportWebVitals()

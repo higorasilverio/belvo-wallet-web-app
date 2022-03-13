@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 const Mainly = styled.main`
   width: 100vw;
@@ -23,10 +23,10 @@ const Mainly = styled.main`
     #0082c8,
     #667db6
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-`;
+`
 
 const Main = ({ children }) => {
-  return <Mainly>{children}</Mainly>;
-};
+  return <Mainly>{children}</Mainly>
+}
 
-export default Main;
+export default Main
