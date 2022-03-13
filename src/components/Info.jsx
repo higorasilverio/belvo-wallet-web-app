@@ -17,6 +17,11 @@ const InfoBody = styled.div`
   color: #f00;
   font-weight: bold;
   letter-spacing: 1px;
+
+  @media screen and (max-width: 1024px) {
+    bottom: 5vh;
+    width: 270px;
+  }
 `;
 
 const SpanHeader = styled.span`

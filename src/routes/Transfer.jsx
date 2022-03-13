@@ -43,6 +43,11 @@ const Container = styled.form`
   justify-items: center;
   position: fixed;
   top: 15vh;
+
+  @media screen and (max-width: 1024px) {
+    width: 90vw;
+    height: 60vh;
+  }
 `;
 
 const Wrapper = styled.div`
