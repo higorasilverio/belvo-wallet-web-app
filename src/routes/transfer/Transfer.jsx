@@ -128,7 +128,7 @@ const Transfer = () => {
         <S.Wrapper>
           <S.DataText htmlFor="value">enter transaction value</S.DataText>
           <S.InputField
-            type="text"
+            type="number"
             name="value"
             id="value"
             onChange={e => fieldUpdate(e, 'value')}
