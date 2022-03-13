@@ -1,7 +1,7 @@
-import axios from 'axios'
 import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Info, Main } from '../../components'
+import { AppService } from '../../service/service'
 import * as S from './styles'
 
 const Authentication = () => {
@@ -20,15 +20,15 @@ const Authentication = () => {
     [errorDetails]
   )
 
-  const login = useCallback(() => {
-    axios
-      .post('https://belvo-wallet-challenge-api.herokuapp.com/login', {
-        password,
-        username
-      })
-      .then(response => localStorage.setItem('token', `bearer ${response.data.access_token}`))
-      .then(() => navigate('/wallet', { replace: true }))
-      .catch(error => setErrorDetails(error.response.data.detail))
+  const login = useCallback(async () => {
+    try {
+      const service = new AppService()
+      const { access_token } = await service.authenticate(password, username)
+      localStorage.setItem('token', `bearer ${access_token}`)
+      navigate('/wallet', { replace: true })
+    } catch (error) {
+      setErrorDetails(error.response.data.detail)
+    }
   }, [navigate, password, username])
 
   return (

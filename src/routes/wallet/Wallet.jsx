@@ -1,8 +1,8 @@
-import axios from 'axios'
 import { isEmpty } from 'lodash'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useWindowDimensions } from '../../hooks/useWindowDimensions'
+import { AppService } from '../../service/service'
 import * as S from './styles'
 
 const Wallet = () => {
@@ -16,20 +16,16 @@ const Wallet = () => {
   const { width } = useWindowDimensions()
 
   useEffect(() => {
-    const getWallet = () => {
-      const config = {
-        headers: { Authorization: localStorage.getItem('token') }
+    const getWallet = async () => {
+      try {
+        const service = new AppService()
+        const { balance, transactions } = await service.wallet()
+        setBalance(balance)
+        setTransactions(transactions)
+      } catch (error) {
+        localStorage.removeItem('token')
+        navigate('/', { replace: true })
       }
-      axios
-        .get('https://belvo-wallet-challenge-api.herokuapp.com/wallet', config)
-        .then(response => {
-          setBalance(response.data.balance)
-          setTransactions(response.data.transactions)
-        })
-        .catch(() => {
-          localStorage.removeItem('token')
-          navigate('/', { replace: true })
-        })
     }
 
     getWallet()

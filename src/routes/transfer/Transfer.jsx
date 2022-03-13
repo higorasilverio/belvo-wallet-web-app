@@ -1,9 +1,9 @@
-import axios from 'axios'
 import { isEmpty } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Select from 'react-select'
 import { Info } from '../../components'
+import { AppService } from '../../service/service'
 import * as S from './styles'
 
 const Transfer = () => {
@@ -25,64 +25,50 @@ const Transfer = () => {
   ]
 
   useEffect(() => {
-    const getContacts = () => {
-      const config = {
-        headers: { Authorization: localStorage.getItem('token') }
-      }
-      axios
-        .get('https://belvo-wallet-challenge-api.herokuapp.com/contacts', config)
-        .then(response => {
-          let options = []
-          response.data.map(_receiver => {
-            return options.push({
-              value: _receiver.email,
-              label: _receiver.name
-            })
+    const getContacts = async () => {
+      try {
+        const service = new AppService()
+        const data = await service.contacts()
+        let options = []
+        data.map(_receiver => {
+          return options.push({
+            value: _receiver.email,
+            label: _receiver.name
           })
-
-          setReceiversList(options)
         })
-        .catch(() => {
-          localStorage.removeItem('token')
-          navigate('/', { replace: true })
-        })
+        setReceiversList(options)
+      } catch (error) {
+        localStorage.removeItem('token')
+        navigate('/', { replace: true })
+      }
     }
 
     getContacts()
   }, [navigate])
 
-  const postTransfer = useCallback(() => {
+  const postTransfer = useCallback(async () => {
     setColor('#42ba96')
-    const config = {
-      headers: { Authorization: localStorage.getItem('token') }
-    }
     const payload = {
       description,
       amount: value,
       currency,
       receiver
     }
-
-    axios
-      .post('https://belvo-wallet-challenge-api.herokuapp.com/wallet/send', payload, config)
-      .then(response => {
-        setInfoArray([
-          {
-            msg: `Transference ${response.data.status} to ${response.data.receiver}`
-          }
-        ])
-      })
-      .catch(error => {
-        if (error.response.status === 422) {
-          setColor(null)
-          setInfoArray(error.response.data.detail)
-          return
-        }
-        if (error.response.status === 401) {
-          localStorage.removeItem('token')
-          navigate('/', { replace: true })
-        }
-      })
+    try {
+      const service = new AppService()
+      const { status } = await service.transfer(payload)
+      setInfoArray([{ msg: `Transference ${status.toUpperCase()}` }])
+    } catch (error) {
+      if (error.response.status === 422) {
+        setColor(null)
+        setInfoArray(error.response.data.detail)
+        return
+      }
+      if (error.response.status === 401) {
+        localStorage.removeItem('token')
+        navigate('/', { replace: true })
+      }
+    }
   }, [currency, description, navigate, receiver, setInfoArray, value])
 
   useEffect(() => {
