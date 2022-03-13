@@ -36,7 +36,7 @@ const Container = styled.div`
   background-color: #fff;
   border-radius: 15px;
   display: grid;
-  grid-template-rows: 10vh 1fr 1fr;
+  grid-template-rows: 10vh 15vh 1fr;
   text-align: center;
 `;
 
@@ -73,6 +73,12 @@ const InfoText = styled.span`
   color: #fff;
 `;
 
+const CodeText = styled.code`
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: #fff;
+`;
+
 const DataViewBoard = styled.div`
   width: 90%;
   height: 75%;
@@ -80,6 +86,7 @@ const DataViewBoard = styled.div`
   border-radius: 15px;
   color: #fff;
   display: flex;
+  flex-direction: ${(props) => props.direction || "row"};
   justify-content: space-evenly;
   align-items: center;
 `;
@@ -115,13 +122,16 @@ const Wallet = () => {
   useEffect(() => {
     const formatTransactions = () => {
       if (!isEmpty(transactions)) {
-        const mappedTransactions = transactions.map((transaction, index) => (
+        const firstFiveItems = transactions.reverse().slice(0, 5);
+        const mappedTransactions = firstFiveItems.map((transaction, index) => (
           <div key={index}>
-            <InfoText>{`Description: ${transaction.description}, `}</InfoText>
-            <InfoText>{`Amount: ${transaction.amount}, `}</InfoText>
-            <InfoText>{`Currency: ${transaction.currency}, `}</InfoText>
-            <InfoText>{`Sender: ${transaction.sender}, `}</InfoText>
-            <InfoText>{`Receiver: ${transaction.receiver}, `}</InfoText>
+            <CodeText>{`Description: ${transaction.description}, `}</CodeText>
+            <CodeText>{`Amount: ${transaction.amount}, `}</CodeText>
+            <CodeText>{`Currency: ${transaction.currency}, `}</CodeText>
+            <CodeText>{`Sender: ${transaction.sender}, `}</CodeText>
+            <CodeText>{`Receiver: ${transaction.receiver}, `}</CodeText>
+            <CodeText>{`Status: ${transaction.status};`}</CodeText>
+            {index !== 4 && <hr />}
           </div>
         ));
         return mappedTransactions;
@@ -161,7 +171,7 @@ const Wallet = () => {
         </BalanceContainer>
         <TransactionContainer>
           <DataText>last transactions</DataText>
-          <DataViewBoard>{transactionsJsx}</DataViewBoard>
+          <DataViewBoard direction="column">{transactionsJsx}</DataViewBoard>
         </TransactionContainer>
       </Container>
     </Main>
