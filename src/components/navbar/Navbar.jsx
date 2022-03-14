@@ -13,9 +13,13 @@ const Navbar = () => {
     <>
       {pathname !== '/' && (
         <S.NavigationHeader>
-          <S.NavLinks to="/wallet">wallet</S.NavLinks>
-          <S.NavLinks to="/transfer">transfer</S.NavLinks>
-          <S.NavLinks to="/" onClick={() => logout()}>
+          <S.NavLinks to="/wallet" data-testid="walletLink">
+            wallet
+          </S.NavLinks>
+          <S.NavLinks to="/transfer" data-testid="transferLink">
+            transfer
+          </S.NavLinks>
+          <S.NavLinks to="/" data-testid="homeLink" onClick={() => logout()}>
             logout
           </S.NavLinks>
         </S.NavigationHeader>

@@ -18,8 +18,8 @@ const Info = ({ header, message, data, color }) => {
 
   return (
     <S.InfoBody>
-      {header && <S.SpanHeader>{header}</S.SpanHeader>}
-      <S.CodeDiv style={{ backgroundColor: color || '#f00' }}>
+      {header && <S.SpanHeader data-testid="headerSpan">{header}</S.SpanHeader>}
+      <S.CodeDiv data-testid="colorDiv" style={{ backgroundColor: color || '#f00' }}>
         {message && <S.Code>{message}</S.Code>}
         {textToShow()}
       </S.CodeDiv>
